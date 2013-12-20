@@ -14,10 +14,22 @@ namespace core {
 class Atlas : public core::Texture {
  public:
 
+  Atlas();
+
   /**
    * Create a texture atlas from its width and height.
    */
   Atlas(size_t width, size_t height);
+
+  /**
+   * Copy constructor.
+   */
+  Atlas(Atlas const &other);
+
+  /**
+   * Assignement operator.
+   */
+  Atlas &operator=(Atlas const &other);
 
   /**
    * Delete the texture atlas and free all allocated memory.
@@ -64,7 +76,6 @@ class Atlas : public core::Texture {
 
   std::vector<math::Vector3i> _nodes;
   size_t _used;
-  unsigned int _id;
 
   /**
    * Atlas data

@@ -6,11 +6,28 @@
 
 namespace core {
 
+Atlas::Atlas() {}
+
 Atlas::Atlas(size_t width, size_t height) :
   Texture(width, height),
   _used(0) {
   math::Vector3i node = {1, 1, static_cast<int>(width) - 2};
   _nodes.push_back(node);
+}
+
+Atlas::Atlas(Atlas const &other) :
+  Texture(other),
+  _nodes(other._nodes),
+  _used(other._used) {
+}
+
+Atlas &Atlas::operator=(Atlas const &other) {
+  if (this != &other) {
+    Texture::operator=(other);
+    _nodes = other._nodes;
+    _used = other._used;
+  }
+  return *this;
 }
 
 Atlas::~Atlas() {}

@@ -11,11 +11,15 @@ int main(int argc, char **argv) {
   try {
     cmd
       .setSynopsis("<font_path> option...")
-      .setDescription("Simple command line tool to generate distmap.")
+      .setDescription("Simple command line tool to generate font atlas with"
+                      " some parameters. The program will generate a "
+                      "`{font_name}.ttf.json` meta-data file and a"
+                      "`{font_name}.ttf.png` atlas file.")
       .addOption("size", 1024, "size of the generated png")
       .addOption("resolution", 50, "size of the characters")
-      .addOption("padding", 20, "minimal space between the characters.")
-      .addOption("output_dir", ".", "target directory of the generated file.");
+      .addOption("padding", 20, "minimal space between the characters")
+      .addOption("output_dir", ".", "target directory of the generated file")
+      .addOption("distmap", true, "whether to generate as distmap or not");
     if (!cmd.parse(argc, argv))
       return 1;
 

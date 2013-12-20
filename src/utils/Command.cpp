@@ -28,10 +28,21 @@ bool Command::parse(int argc, char **argv) {
 }
 
 void Command::_displayHelp(std::string const &name) {
+  std::cout << std::endl;
   std::cout << "Usage: " << name << " " << _synopsis << std::endl;
   std::cout << std::endl;
   if (!_description.empty()) {
     std::cout << "Descrition:" << std::endl;
+    while (_description.size() > 77) {
+      std::string tmp = _description.substr(0, 77);
+      size_t i = 77;
+      if (tmp.back() != ' ') {
+        i = tmp.find_last_of(' ');
+        tmp = tmp.substr(0, i);
+      }
+      std::cout << "  " << tmp << std::endl;
+      _description = _description.substr(i + 1);
+    }
     std::cout << "  " << _description << std::endl;
     std::cout << std::endl;
   }
@@ -40,6 +51,7 @@ void Command::_displayHelp(std::string const &name) {
     for (auto const &o : _optionsDesc)
       std::cout << "  " << o.first << " -- " << o.second << std::endl;
   }
+  std::cout << std::endl;
 }
 
 }

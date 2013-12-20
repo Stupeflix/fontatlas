@@ -30,7 +30,6 @@ void Distmap::generate(Texture const &other) {
   if (!xdist || !ydist || !gx || !gy || !data || !outside || !inside)
     throw std::runtime_error("Cannot generated distmap, size is too big.");
 
-
   // Convert img into double (data)
   unsigned char *img = other.getData();
   double img_min = 255;
