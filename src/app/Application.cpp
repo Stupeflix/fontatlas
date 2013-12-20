@@ -38,7 +38,7 @@ void Application::start(utils::Command const &cmd) {
     std::string atlasPath = out_path + "." +
       utils::convert<std::string>(i) + ".png";
     if (cmd.getOption<bool>("verbose"))
-      std::cout << "Generate " << atlasPath << std::endl;
+      std::cout << "Generated " << atlasPath << std::endl;
     currentOffset = font.generate(atlas, currentOffset);
 
     /* Generate distmap and save it to a file */
@@ -56,7 +56,7 @@ void Application::start(utils::Command const &cmd) {
 
   /* Save meta data */
   if (cmd.getOption<bool>("verbose"))
-    std::cout << "Generate " << out_path << ".json" << std::endl;
+    std::cout << "Generated " << out_path << ".json" << std::endl;
   std::ofstream jsonFile(out_path + ".json");
   jsonFile << font.toJson();
   jsonFile.close();

@@ -28,7 +28,7 @@ $ fontatlas ./league.ttf size=512 padding=20
 ### Parameters
 
 - __help__ - display usage
-- __verbose__ - display some informations about the generation
+- __verbose__ - display some informations about the generation (true by default)
 - __distmap__ - whether to generate as distmap or not (true by default)
 - __size__ - size of the generated png (1024 by default)
 - __resolution__ - size of the characters (50 by default)
