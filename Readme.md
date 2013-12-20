@@ -11,13 +11,13 @@ $ mkdir build && cd build && cmake .. && sudo make install
 Usage
 -----
 
-You can generate your font atlas and your metadata simply by using...
+You can generate your font atlas and your metadata simply by using:
 
 ```sh
 $ fontatlas league.ttf
 ````
 
-... which will generate _league.ttf.json_ and _league.ttf.png_ file.
+This command generates a _league.ttf.json_ meta-data file, and some atlas files which will contain all glyphs (e.g. league.1.png, league.2.png).
 
 You can also add some parameters for generation, for example:
 
