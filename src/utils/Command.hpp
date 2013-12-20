@@ -27,7 +27,7 @@ class Command {
   }
 
   template<typename Type>
-  Command &addOption(std::string const &name,
+  Command &addOpt(std::string const &name,
                      Type const &value,
                      std::string const &help = "") {
     _options[name] = convert<std::string>(value);
@@ -36,7 +36,7 @@ class Command {
   }
 
   template<typename Type>
-  Type getOption(std::string const &name) const {
+  Type getOpt(std::string const &name) const {
     if (_options.find(name) == _options.end())
       throw std::runtime_error("unknown option " + name + ".");
     return convert<Type>(_options.at(name));

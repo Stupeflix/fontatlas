@@ -15,12 +15,12 @@ int main(int argc, char **argv) {
                       " some parameters. The program will generate a "
                       "`{font_name}.ttf.json` meta-data file and a"
                       "`{font_name}.ttf.png` atlas file.")
-      .addOption("size", 1024, "size of the generated png")
-      .addOption("resolution", 50, "size of the characters")
-      .addOption("padding", 20, "minimal space between the characters")
-      .addOption("output_dir", ".", "target directory of the generated file")
-      .addOption("distmap", true, "whether to generate as distmap or not")
-      .addOption("verbose", true, "output some information");
+      .addOpt("size", 1024, "size of the generated png")
+      .addOpt("resolution", 50, "size of the characters")
+      .addOpt("padding", 20, "minimal space between the characters")
+      .addOpt("output_dir", ".", "target directory of the generated file")
+      .addOpt("distmap", true, "whether to generate as distmap or not")
+      .addOpt("verbose", true, "output some information");
     if (!cmd.parse(argc, argv))
       return 1;
 
