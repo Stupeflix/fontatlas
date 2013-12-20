@@ -22,7 +22,7 @@ $ fontatlas league.ttf
 You can also add some parameters for generation, for example:
 
 ```sh
-$ fontatlas league.ttf size=512 padding=20
+$ fontatlas ./league.ttf size=512 padding=20
 ```
 
 ### Parameters

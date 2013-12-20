@@ -19,6 +19,8 @@ void Application::start(utils::Command const &cmd) {
   size_t slash = path.find_last_of('/');
   if (slash != std::string::npos)
     out_path = path.substr(slash + 1);
+  else
+    out_path = path;
   out_path = cmd.getOption<std::string>("output_dir") + "/" + out_path;
 
   /* Generate texture font */
