@@ -57,9 +57,9 @@ std::string Font::toJson() const {
   json += "\"atlas_width\":" + atlas_width + ",";
   json += "\"atlas_height\":" + atlas_height + ",";
   json += "\"glyphs_number\":" + glyphs_number + ",";
-  json += "\"glyphs\":{\n";
+  json += "\"glyphs\":{";
   for (size_t i = 1; i < _glyphs.size(); ++i) {
-    json += "    " + _glyphs[i]->toJson();
+    json += _glyphs[i]->toJson();
     if (i + 1 < _glyphs.size())
       json += ",";
   }
