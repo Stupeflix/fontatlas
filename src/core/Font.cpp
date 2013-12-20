@@ -53,19 +53,17 @@ std::string Font::toJson() const {
   std::string atlas_height = utils::convert<std::string>(_textureHeight);
   std::string glyphs_number = utils::convert<std::string>(_glyphs.size());
 
-  json += "{\n";
-  json += "  \"atlas_width\": " + atlas_width + ",\n";
-  json += "  \"atlas_height\": " + atlas_height + ",\n";
-  json += "  \"glyphs_number\": " + glyphs_number + ",\n";
-  json += "  \"glyphs\": {\n";
+  json += "{";
+  json += "\"atlas_width\":" + atlas_width + ",";
+  json += "\"atlas_height\":" + atlas_height + ",";
+  json += "\"glyphs_number\":" + glyphs_number + ",";
+  json += "\"glyphs\":{\n";
   for (size_t i = 1; i < _glyphs.size(); ++i) {
     json += "    " + _glyphs[i]->toJson();
     if (i + 1 < _glyphs.size())
       json += ",";
-    json += "\n";
   }
-  json += "  }\n";
-  json += "}\n";
+  json += "}}";
   return json;
 }
 
