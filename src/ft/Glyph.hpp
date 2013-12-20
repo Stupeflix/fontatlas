@@ -1,9 +1,8 @@
 
 #pragma once
 
-#include <vector>
+#include <map>
 #include "ft/ft.hpp"
-#include "ft/Kerning.hpp"
 #include FT_GLYPH_H
 
 namespace ft {
@@ -26,7 +25,7 @@ class Glyph {
 
   /**
    * Get the kerning between two horizontal glyphs.
-   * @param charcode  codepoint of the preceding glyph
+   * @param charcode  charcode of the previous glyph
    * @return x kerning value
    */
   float getKerning(const wchar_t charcode) const;
@@ -36,38 +35,18 @@ class Glyph {
    */
   std::string toJson() const;
 
-  /** Glyph's charcode. */
-  wchar_t charcode;
-
-  /** Glyph's width in pixels. */
-  std::size_t width;
-
-  /** Glyph's height in pixels. */
-  std::size_t height;
-
-  /** Glyph's left offset in pixels. */
-  int offset_x;
-
-  /** Glyph's top offset in pixels. */
-  int offset_y;
-
-  /** Glyph's advancement relative to the previous char. */
-  float advance_x;
-
-  /** Glyph's advancement relative to the previous line. */
-  float advance_y;
-
-  /** Normalized texture coordinates. */
-  float s0, t0, s1, t1;
-
-  unsigned char *buffer;
-
-  std::size_t pitch;
-
-  /**
-   * A vector of kerning pairs relative to this glyph.
-   */
-  std::vector<Kerning> kerning;
+  wchar_t                  charcode;
+  size_t                   atlas;
+  std::size_t              width;
+  std::size_t              height;
+  int                      offset_x;
+  int                      offset_y;
+  float                    advance_x;
+  float                    advance_y;
+  float                    s0, t0, s1, t1;
+  unsigned char            *buffer;
+  std::size_t              pitch;
+  std::map<wchar_t, float> kerning;
 };
 
 }  // namespace ft

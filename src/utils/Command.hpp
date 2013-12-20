@@ -45,7 +45,8 @@ class Command {
   template<typename Type>
   std::string const &getArg(size_t i) const {
     if (i >= _args.size())
-      throw std::out_of_range("too few arguments in command line.");
+      throw std::out_of_range(
+        "too few arguments (`" + _name + " help` for more infos).");
     return _args[i];
   }
 
@@ -56,6 +57,7 @@ class Command {
   std::map<std::string, std::string> _options;
   std::map<std::string, std::string> _optionsDesc;
   std::vector<std::string> _args;
+  std::string _name;
   std::string _description;
   std::string _synopsis;
 };

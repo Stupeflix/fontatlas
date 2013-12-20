@@ -18,8 +18,8 @@ class Face {
    * Create a Face.
    */
   explicit Face(std::string const &path,
-                    std::size_t size = 30,
-                    std::size_t hres = 64);
+                std::size_t size = 30,
+                std::size_t hres = 64);
 
   /**
    * Free the memory allocated by the font Face.

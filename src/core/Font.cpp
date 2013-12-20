@@ -1,6 +1,6 @@
 
-#include <iostream>
 #include <stdexcept>
+#include <limits>
 #include <cmath>
 #include <wchar.h>
 #include "ft/Error.hpp"
@@ -17,6 +17,7 @@ Font::Font(std::string const &path,
   if (size <= 0)
     throw std::runtime_error("Font size should be positive.");
   _cache = _face.getCharacters();
+  _atlasOffset = 1;
   _textureWidth = 0;
   _textureHeight = 0;
   _height = 0;
@@ -37,6 +38,10 @@ Font::~Font() {
 
 void Font::setPadding(size_t padding) {
   _padding = padding;
+}
+
+size_t Font::getSize() const {
+  return _cache.size();
 }
 
 std::string Font::toJson() const {
@@ -83,12 +88,21 @@ size_t Font::generate(Atlas &atlas, size_t offset) {
     size_t w = glyph->width + _padding;
     size_t h = glyph->height + _padding;
     math::Rect const &region = atlas.getRegion(w, h);
-    if (region.x < 0)
+
+    /* Return the current cache offset if the atlas is full */
+    if (region.x == std::numeric_limits<size_t>::max()) {
+      ++_atlasOffset;
       return i;
+    }
+
+    /* Push glyph bitmap into atlas */
     x = region.x + (_padding >> 1);
     y = region.y + (_padding >> 1);
     atlas.setRegion(x, y, glyph->width, glyph->height,
                      glyph->buffer, glyph->pitch);
+
+    /* Set current atlas */
+    glyph->atlas = _atlasOffset;
 
     /* Deduce texture coordinates from atlas region */
     glyph->s0 = x / (float)atlas.getWidth();
@@ -110,12 +124,10 @@ void Font::_computeKerning() {
     glyph = _glyphs[i];
     for (size_t j = 1; j < _glyphs.size(); ++j) {
       prev = _glyphs[j];
-      math::Vector2i const &kerning = _face.getKerning(prev->charcode, glyph->charcode);
-      if( kerning.x ) {
-        // hres = 64
-        ft::Kerning k = {prev->charcode, kerning.x / (float)(64.0f * 64.0f)};
-        glyph->kerning.push_back(k);
-      }
+      math::Vector2i const &kerning =
+          _face.getKerning(prev->charcode, glyph->charcode);
+      if (kerning.x)
+        glyph->kerning[prev->charcode] = kerning.x / (float)(64.0f * 64.0f);
     }
   }
 }

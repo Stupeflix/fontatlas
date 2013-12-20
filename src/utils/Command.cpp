@@ -9,6 +9,7 @@ Command::Command() {}
 Command::~Command() {}
 
 bool Command::parse(int argc, char **argv) {
+  _name = argv[0];
   for (size_t i = 1; i < argc; ++i) {
     std::string arg = argv[i];
     size_t n = arg.find('=');

@@ -32,16 +32,27 @@ class Font {
   void setPadding(size_t padding);
 
   /**
+   * Return number of utf-8 chars generated from font.
+   */
+  size_t getSize() const;
+
+  /**
    * Save font meta-data to a json file.
    */
   std::string toJson() const;
 
   /**
    * Generate the texture from the chars into the texture fonts
-   * and others settings (like padding).
+   * and others settings (like padding). Note that it will also
+   * store the generated chars into `_genCache` vector which is
+   * useful for json meta-data generation.
+   * @param atlas The atlas to fill by the generation.
+   * @param offset The offset to use into the cache.
+   * @return The current offset generated.
    */
   size_t generate(Atlas &atlas, size_t offset = 0);
 
+ private:
   /**
    * Load the font and store data into the given `FT_Face`.
    */
@@ -56,6 +67,7 @@ class Font {
   ft::Face _face;
   std::string _path;
   std::wstring _cache;
+  size_t _atlasOffset;
   size_t _padding;
   size_t _textureWidth;
   size_t _textureHeight;

@@ -19,7 +19,8 @@ int main(int argc, char **argv) {
       .addOption("resolution", 50, "size of the characters")
       .addOption("padding", 20, "minimal space between the characters")
       .addOption("output_dir", ".", "target directory of the generated file")
-      .addOption("distmap", true, "whether to generate as distmap or not");
+      .addOption("distmap", true, "whether to generate as distmap or not")
+      .addOption("verbose", true, "output some information");
     if (!cmd.parse(argc, argv))
       return 1;
 

@@ -38,7 +38,7 @@ class Error : public std::exception {
       _what += file + ": ";
     if (line > 0)
       _what += utils::convert<std::string>(line) + ": ";
-    _what = "Freetype fails with code ";
+    _what = "freetype fails with code ";
     _what += utils::convert<std::string>(getCode()) + " and message \"";
     _what += std::string(FT_Errors[error].message) + "\".";
   }

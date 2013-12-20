@@ -13,7 +13,7 @@ template<typename To, typename From>
 To convert(From const &from) {
   std::stringstream s;
   To to;
-  s << from;
+  s << std::boolalpha << from;
   s >> to;
   return to;
 }

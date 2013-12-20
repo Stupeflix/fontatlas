@@ -37,7 +37,7 @@ class Library {
   }
 
   static FT_Library _handle;
-  static bool _initialized;
+  static bool       _initialized;
 
 };
 
