@@ -18,7 +18,7 @@ class Font {
   /**
    * Create a font from a filename and the font size.
    */
-  Font(std::string const &path, float size);
+  Font(std::string const &path, float size, std::string const &characters = "");
 
   /**
    * Free all memory allocated by the font. However atlas isnt

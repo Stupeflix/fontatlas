@@ -3,16 +3,17 @@
 #include <fstream>
 #include "core/Font.hpp"
 #include "core/Distmap.hpp"
-#include "app/Application.hpp"
+#include "core/Generator.hpp"
 
-Application::Application() {}
+namespace core {
 
-Application::~Application() {}
-
-void Application::start(utils::Command const &cmd) {
-
-  std::size_t size = cmd.getOpt<std::size_t>("size");
-  std::string path = cmd.getArg<std::string>(0);
+void Generator::generate(std::string const &path,
+                           std::string const &output_dir,
+                           std::size_t resolution,
+                           std::size_t padding,
+                           std::size_t size,
+                           bool verbose,
+                           bool generate_distmap) {
 
   /* Generate result path */
   std::string out_path;
@@ -21,13 +22,12 @@ void Application::start(utils::Command const &cmd) {
     out_path = path.substr(slash + 1);
   else
     out_path = path;
-  out_path = cmd.getOpt<std::string>("output_dir") + "/" + out_path;
+  out_path = output_dir + "/" + out_path;
 
   /* Generate texture font */
   core::Atlas atlas(size, size);
-  core::Font font(path,
-      cmd.getOpt<std::size_t>("resolution"));
-  font.setPadding(cmd.getOpt<std::size_t>("padding"));
+  core::Font font(path, resolution);
+  font.setPadding(padding);
 
   size_t currentOffset = 0;
   size_t i = 1;
@@ -37,12 +37,12 @@ void Application::start(utils::Command const &cmd) {
     /* Generate atlas */
     std::string atlasPath = out_path + "." +
       utils::convert<std::string>(i) + ".png";
-    if (cmd.getOpt<bool>("verbose"))
+    if (verbose)
       std::cout << "Generated " << atlasPath << std::endl;
     currentOffset = font.generate(atlas, currentOffset);
 
     /* Generate distmap and save it to a file */
-    if (cmd.getOpt<bool>("distmap")) {
+    if (generate_distmap) {
       core::Distmap distmap(size, size);
       distmap.generate(atlas);
       distmap.saveToPng(atlasPath);
@@ -55,10 +55,11 @@ void Application::start(utils::Command const &cmd) {
   }
 
   /* Save meta data */
-  if (cmd.getOpt<bool>("verbose"))
+  if (verbose)
     std::cout << "Generated " << out_path << ".json" << std::endl;
   std::ofstream jsonFile(out_path + ".json");
   jsonFile << font.toJson();
   jsonFile.close();
+}
 
 }

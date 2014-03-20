@@ -1,10 +1,9 @@
 
 #include <iostream>
-#include "app/Application.hpp"
+#include "core/Generator.hpp"
 #include "utils/Command.hpp"
 
 int main(int argc, char **argv) {
-  Application app;
   utils::Command cmd;
 
   /* Start application */
@@ -24,7 +23,15 @@ int main(int argc, char **argv) {
     if (!cmd.parse(argc, argv))
       return 1;
 
-    app.start(cmd);
+  core::Generator::generate(
+    cmd.getArg<std::string>(0),
+    cmd.getOpt<std::string>("output_dir"),
+    cmd.getOpt<std::size_t>("resolution"),
+    cmd.getOpt<std::size_t>("padding"),
+    cmd.getOpt<std::size_t>("size"),
+    cmd.getOpt<bool>("verbose"),
+    cmd.getOpt<bool>("distmap")
+  );
 
   } catch (std::exception const &e) {
     std::cerr << "Error: " << e.what() << std::endl;

@@ -10,7 +10,7 @@
 namespace core {
 
 Font::Font(std::string const &path,
-                         float size) :
+                         float size, std::string const &characters) :
   _face(path, size),
   _path(path),
   _size(size) {
@@ -116,7 +116,7 @@ size_t Font::generate(Atlas &atlas, size_t offset) {
 
 void Font::_computeKerning() {
   ft::Glyph *glyph, *prev;
-  
+
   /* Compute kernings. */
   for (size_t i = 1; i < _glyphs.size(); ++i) {
     glyph = _glyphs[i];
