@@ -23,7 +23,8 @@ include_directories(${FREETYPE_INCLUDE_DIRS}
                     src)
 
 # Create executable and link libraries.
-add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES})
+add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} app/main.cpp)
+add_library(${PROJECT_NAME}_lib ${SOURCES})
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${MATH_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${PNG_LIBRARIES})
