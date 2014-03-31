@@ -46,6 +46,7 @@ void Generator::generate(std::string const &path,
   while (currentOffset < font.getSize()) {
 
     /* Generate atlas */
+
     std::string atlasPath = out_path + "." +
       utils::convert<std::string>(i) + ".png";
     if (verbose && dataType == FONT_DATA)
@@ -65,6 +66,7 @@ void Generator::generate(std::string const &path,
     }
 
     /* Generate distmap and save it to a file */
+
     if (generate_distmap) {
       core::Distmap distmap(size, size);
       distmap.generate(atlas);
@@ -79,15 +81,12 @@ void Generator::generate(std::string const &path,
     ++i;
   }
 
-  std::cout << std::endl;
-
-  // std::cout << meta_data << std::endl;
-
   /* Save meta data */
+
   if (verbose && dataType == FONT_DATA)
     std::cout << "Generated " << out_path << ".json" << std::endl;
   else if (verbose && dataType == META_DATA)
-    std::cout << "Generated " << out_path << ".meta.json" << std::endl;
+    std::cout << std::endl << "Generated " << out_path << ".meta.json" << std::endl;
 
   if (dataType == FONT_DATA) {
     std::ofstream jsonFile(out_path + ".json");
