@@ -9,13 +9,10 @@
 
 namespace core {
 
-Font::Font(std::string const &path,
-                         float size, std::string const &characters) :
+Font::Font(std::string const &path, float size) :
   _face(path, size),
   _path(path),
   _size(size) {
-  if (size <= 0)
-    throw std::runtime_error("Font size should be positive.");
   _cache = _face.getCharacters();
   _atlasOffset = 1;
   _textureWidth = 0;
@@ -24,7 +21,25 @@ Font::Font(std::string const &path,
   _padding = 0;
   _ascender = 0;
   _descender = 0;
-  _size = size;
+  _ascender = _face.getAscender();
+  _descender = _face.getDescender();
+  _height = _face.getHeight();
+  _linegap = _face.getLinegap();
+}
+
+Font::Font(std::string const &path,
+                         float size, std::wstring const &cache) :
+  _face(path, size),
+  _path(path),
+  _size(size) {
+  _cache = cache;
+  _atlasOffset = 1;
+  _textureWidth = 0;
+  _textureHeight = 0;
+  _height = 0;
+  _padding = 0;
+  _ascender = 0;
+  _descender = 0;
   _ascender = _face.getAscender();
   _descender = _face.getDescender();
   _height = _face.getHeight();
@@ -40,11 +55,26 @@ void Font::setPadding(size_t padding) {
   _padding = padding;
 }
 
+std::wstring const &Font::getCache() const {
+  return _cache;
+}
+
 size_t Font::getSize() const {
   return _cache.size();
 }
 
-std::string Font::toJson() const {
+std::string Font::cacheToJson(size_t begin, size_t end, bool readable) const {
+  std::string json = "[";
+  for (size_t i = begin; i < end; ++i) {
+    json += utils::convert<std::string>(_cache[i]);
+    if (i != end - 1)
+      json += ", ";
+  }
+  json += "]";
+  return json;
+}
+
+std::string Font::toJson(bool rd) const {
   std::string json;
 
   if (_textureWidth == 0 || _textureHeight == 0)
@@ -53,29 +83,29 @@ std::string Font::toJson() const {
   std::string atlas_height = utils::convert<std::string>(_textureHeight);
   std::string glyphs_number = utils::convert<std::string>(_glyphs.size());
 
-  json += "{";
-  json += "\"atlas_width\":" + atlas_width + ",";
-  json += "\"atlas_height\":" + atlas_height + ",";
-  json += "\"glyphs_number\":" + glyphs_number + ",";
-  json += "\"glyphs\":{";
+  json += "{" + _newline(rd);
+  json += _space(2, rd) + "\"atlas_width\":" + _space(2, rd) + atlas_width + "," + _newline(rd);
+  json += _space(2, rd) + "\"atlas_height\":" + _space(2, rd) + atlas_height + "," + _newline(rd);
+  json += _space(2, rd) + "\"glyphs_number\":" + _space(2, rd) + glyphs_number + "," + _newline(rd);
+  json += _space(2, rd) + "\"glyphs\":" + _space(2, rd) + "{" + _newline(rd);
   for (size_t i = 1; i < _glyphs.size(); ++i) {
-    json += _glyphs[i]->toJson();
+    json += _space(4, rd) + _glyphs[i]->toJson();
     if (i + 1 < _glyphs.size())
-      json += ",";
+      json += "," + _newline(rd);
   }
   json += "}}";
   return json;
 }
 
 size_t Font::generate(Atlas &atlas, size_t offset) {
-  std::size_t s = _cache.size();
-  if (offset > s)
+  std::size_t size = _cache.size();
+  if (offset > size)
     throw std::out_of_range(
         "charcode offset cannot be higher than cache size.");
 
   _textureWidth = atlas.getWidth();
   _textureHeight = atlas.getHeight();
-  for (std::size_t i = offset; i < s; ++i) {
+  for (std::size_t i = offset; i < size; ++i) {
 
     /* Load glyphs data from face */
     std::size_t x = 0;
@@ -111,7 +141,7 @@ size_t Font::generate(Atlas &atlas, size_t offset) {
 
   }
   _computeKerning();
-  return s;
+  return size;
 }
 
 void Font::_computeKerning() {
@@ -128,6 +158,19 @@ void Font::_computeKerning() {
         glyph->kerning[prev->charcode] = kerning.x / (float)(64.0f * 64.0f);
     }
   }
+}
+
+std::string Font::_space(size_t nb, bool readable) const {
+  if (!readable)
+    return "";
+  std::string spaces;
+  for (size_t i = 0; i < nb; ++i)
+    spaces += " ";
+  return spaces;
+}
+
+std::string Font::_newline(bool readable) const {
+  return readable ? "\n" : "";
 }
 
 }

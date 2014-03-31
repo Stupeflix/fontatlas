@@ -1,8 +1,7 @@
 
 #pragma once
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include "ft/ft.hpp"
 #include "ft/Error.hpp"
 
 namespace ft {

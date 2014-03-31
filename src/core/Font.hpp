@@ -16,9 +16,14 @@ class Font {
  public:
 
   /**
-   * Create a font from a filename and the font size.
+   * Create a font from a filename and the font size and the characters to load.
    */
-  Font(std::string const &path, float size, std::string const &characters = "");
+  Font(std::string const &path, float size, std::wstring const &cache);
+
+  /**
+   * Create a font and load all its characters.
+   */
+  Font(std::string const &path, float size);
 
   /**
    * Free all memory allocated by the font. However atlas isnt
@@ -37,9 +42,19 @@ class Font {
   size_t getSize() const;
 
   /**
+   * Return the characters loaded in the font.
+   */
+  std::wstring const &getCache() const;
+
+  /**
+   * Return cache to JSON.
+   */
+  std::string cacheToJson(size_t begin, size_t end, bool readable = false) const;
+
+  /**
    * Save font meta-data to a json file.
    */
-  std::string toJson() const;
+  std::string toJson(bool readable = false) const;
 
   /**
    * Generate the texture from the chars into the texture fonts
@@ -62,6 +77,10 @@ class Font {
    * Compute the kerning of all characters of the font.
    */
   void _computeKerning();
+
+  std::string _space(size_t nb, bool readable) const;
+
+  std::string _newline(bool readable) const;
 
   std::vector<ft::Glyph *> _glyphs;
   ft::Face _face;

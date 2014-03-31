@@ -4,5 +4,5 @@
 /**
  * Freetype includes.
  */
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <freetype/ft2build.h>
+#include <freetype/freetype.h>
