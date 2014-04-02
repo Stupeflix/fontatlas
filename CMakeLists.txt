@@ -20,8 +20,6 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 set(FREETYPE_INCLUDE_DIRS /usr/local/Cellar/freetype/2.5.2/include)
 # endif()
 
-message("--> " ${FREETYPE_INCLUDE_DIRS})
-
 # Include libs directories.
 include_directories(${FREETYPE_INCLUDE_DIRS}
                     ${MATH_INCLUDE_DIRS}
