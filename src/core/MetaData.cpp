@@ -4,6 +4,10 @@
 
 namespace core {
 
+MetaData::MetaData() {}
+
+MetaData::~MetaData() {}
+
 void MetaData::addRow(std::wstring const &row, wchar_t from, wchar_t to) {
     _rows.push_back(row.substr(from, to - from));
 }
