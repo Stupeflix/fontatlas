@@ -1,0 +1,34 @@
+
+#pragma once
+
+namespace osgStupeflix {
+
+namespace fontAtlas {
+
+enum DataType {
+    META_DATA,
+    FONT_DATA
+};
+
+// Generate all atlas for one font.
+void generateFontData(std::string const &path,
+                      std::string const &output_dir = ".",
+                      DataType type = FONT_DATA,
+                      std::size_t resolution = 50,
+                      std::size_t padding = 20,
+                      std::size_t size = 1024,
+                      bool verbose = false,
+                      bool generate_distmap = true);
+
+// Generate one atlas from the given char.
+void generateFromChar(wchar_t c,
+                      std::string const &path,
+                      std::string const &meta_dir = ".",
+                      std::string const &output_dir = ".",
+                      std::size_t resolution = 50,
+                      std::size_t padding = 20,
+                      std::size_t size = 1024);
+
+}
+
+}

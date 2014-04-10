@@ -5,21 +5,23 @@
 #include "core/Font.hpp"
 #include "core/Distmap.hpp"
 #include "core/MetaData.hpp"
-#include "core/Generator.hpp"
+#include "api/FontAtlas"
 
-namespace core {
+namespace osgStupeflix {
 
-void Generator::generate(std::string const &path,
-                         std::string const &output_dir,
-                         DataType dataType,
-                         std::size_t resolution,
-                         std::size_t padding,
-                         std::size_t size,
-                         bool verbose,
-                         bool generate_distmap) {
+namespace fontAtlas {
+
+void generateFontData(std::string const &path,
+                      std::string const &output_dir,
+                      DataType dataType,
+                      std::size_t resolution,
+                      std::size_t padding,
+                      std::size_t size,
+                      bool verbose,
+                      bool generate_distmap) {
 
 
-  MetaData meta_data;
+  core::MetaData meta_data;
   std::string out_path = output_dir + "/" + utils::getFileName(path);
   core::Atlas atlas(size, size);
   core::Font font(path, resolution);
@@ -82,14 +84,14 @@ void Generator::generate(std::string const &path,
   }
 }
 
-void Generator::generateOne(wchar_t c,
-                            std::string const &path,
-                            std::string const &meta_dir,
-                            std::string const &output_dir,
-                            std::size_t resolution,
-                            std::size_t padding,
-                            std::size_t size) {
-  MetaData meta_data;
+void generateFromChar(wchar_t c,
+                      std::string const &path,
+                      std::string const &meta_dir,
+                      std::string const &output_dir,
+                      std::size_t resolution,
+                      std::size_t padding,
+                      std::size_t size) {
+  core::MetaData meta_data;
   std::string meta_file = meta_dir + "/" + utils::getFileName(path) + ".meta";
   std::string out_path = output_dir + "/" + utils::getFileName(path);
 
@@ -130,6 +132,8 @@ void Generator::generateOne(wchar_t c,
   jsonFile << font.toJson();
   jsonFile.close();
 
+
+}
 
 }
 

@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "core/Generator.hpp"
+#include "api/FontAtlas"
 #include "utils/Command.hpp"
 
 int main(int argc, char **argv) {
@@ -24,11 +24,11 @@ int main(int argc, char **argv) {
     if (!cmd.parse(argc, argv))
       return 1;
 
-  core::Generator::generate(
+  osgStupeflix::fontAtlas::generateFontData(
     cmd.getArg<std::string>(0),
     cmd.getOpt<std::string>("output_dir"),
     cmd.getOpt<std::string>("dataType") == "META_DATA" ?
-        core::Generator::META_DATA : core::Generator::FONT_DATA,
+        osgStupeflix::fontAtlas::META_DATA : osgStupeflix::fontAtlas::FONT_DATA,
     cmd.getOpt<std::size_t>("resolution"),
     cmd.getOpt<std::size_t>("padding"),
     cmd.getOpt<std::size_t>("size"),
