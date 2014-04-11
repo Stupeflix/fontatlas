@@ -135,7 +135,7 @@ void generateFromChar(wchar_t c,
 
 }
 
-void getKerning(wchar_t first,
+float getKerning(wchar_t first,
                 wchar_t second,
                 std::string const &font_path,
                 std::size_t font_size) {

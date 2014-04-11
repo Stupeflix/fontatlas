@@ -79,11 +79,13 @@ std::string Font::toJson(bool rd) const {
 
   if (_textureWidth == 0 || _textureHeight == 0)
     return "{}";
+  std::string font_size = utils::convert<std::string>(_size);
   std::string atlas_width = utils::convert<std::string>(_textureWidth);
   std::string atlas_height = utils::convert<std::string>(_textureHeight);
   std::string glyphs_number = utils::convert<std::string>(_glyphs.size());
 
   json += "{" + _newline(rd);
+  json += _space(2, rd) + "\"font_size\":" + _space(2, rd) + font_size + "," + _newline(rd);
   json += _space(2, rd) + "\"atlas_width\":" + _space(2, rd) + atlas_width + "," + _newline(rd);
   json += _space(2, rd) + "\"atlas_height\":" + _space(2, rd) + atlas_height + "," + _newline(rd);
   json += _space(2, rd) + "\"glyphs_number\":" + _space(2, rd) + glyphs_number + "," + _newline(rd);
