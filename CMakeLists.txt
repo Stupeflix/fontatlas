@@ -3,7 +3,7 @@ CMAKE_MINIMUM_REQUIRED( VERSION 2.8.5 )
 project(fontatlas)
 
 # Config.
-set(CMAKE_CXX_FLAGS "-ggdb3 -std=c++0x -Wno-write-strings")
+set(CMAKE_CXX_FLAGS "-ggdb3 -stdlib=libstdc++ -std=c++11 -Wno-write-strings")
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules"
                       "${CMAKE_MODULE_PATH}" )
 
@@ -17,7 +17,8 @@ file(GLOB_RECURSE HEADERS "src/*.hpp")
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # if(not ${FREETYPE_INCLUDE_DIRS})
-set(FREETYPE_INCLUDE_DIRS /usr/local/Cellar/freetype/2.5.2/include)
+set(FREETYPE_INCLUDE_DIRS /opt/local/include/freetype2/
+                          /usr/local/include/freetype/)
 # endif()
 
 # Include libs directories.
@@ -28,7 +29,11 @@ include_directories(${FREETYPE_INCLUDE_DIRS}
 
 # Create executable and link libraries.
 add_executable(${PROJECT_NAME} ${HEADERS} ${SOURCES} app/main.cpp)
-add_library(${PROJECT_NAME}_lib ${SOURCES})
+add_library(${PROJECT_NAME}_lib SHARED ${SOURCES})
+target_link_libraries(${PROJECT_NAME}_lib ${FREETYPE_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_lib ${MATH_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_lib ${PNG_LIBRARIES})
+
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${MATH_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${PNG_LIBRARIES})

@@ -37,7 +37,7 @@ void Command::_displayHelp(std::string const &name) {
     while (_description.size() > 77) {
       std::string tmp = _description.substr(0, 77);
       size_t i = 77;
-      if (tmp.back() != ' ') {
+      if (*tmp.rbegin() != ' ') {
         i = tmp.find_last_of(' ');
         tmp = tmp.substr(0, i);
       }

@@ -1,6 +1,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <stdexcept>
 #include "utils/Path.hpp"
 #include "core/Font.hpp"
 #include "core/Distmap.hpp"
@@ -74,7 +75,7 @@ void generateFontData(std::string const &font_path,
   if (dataType == FONT_DATA) {
     if (verbose)
       std::cout << "Generated " << out_path << ".json" << std::endl;
-    std::ofstream jsonFile(out_path + ".json");
+    std::ofstream jsonFile((out_path + ".json").c_str());
     jsonFile << font.toJson();
     jsonFile.close();
   } else if (dataType == META_DATA) {
@@ -128,7 +129,7 @@ void generateFromChar(wchar_t c,
 
   /* Save meta data */
 
-  std::ofstream jsonFile(out_path + ".json");
+  std::ofstream jsonFile((out_path + ".json").c_str());
   jsonFile << font.toJson();
   jsonFile.close();
 

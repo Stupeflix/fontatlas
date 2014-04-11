@@ -1,5 +1,6 @@
 
 #include <fstream>
+#include <stdexcept>
 #include "core/MetaData.hpp"
 
 namespace core {
@@ -22,7 +23,7 @@ std::wstring const &MetaData::getRowFromChar(wchar_t c) const {
 
 bool MetaData::save(std::string const &path) const {
     std::ofstream file;
-    file.open(path, std::ios::out | std::ios::binary);
+    file.open(path.c_str(), std::ios::out | std::ios::binary);
     if (!file.is_open())
         return false;
     wchar_t nb_rows = _rows.size();
