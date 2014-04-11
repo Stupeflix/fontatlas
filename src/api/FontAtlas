@@ -2,6 +2,8 @@
 #ifndef OSG_STUPEFLIX_FONTATLAS__
 # define OSG_STUPEFLIX_FONTATLAS__
 
+#include <string>
+
 namespace osgStupeflix {
 
 namespace fontAtlas {
