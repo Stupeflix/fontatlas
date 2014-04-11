@@ -43,9 +43,9 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_ft2build ft2build.h
   /opt/local/include
   /usr/freeware/include
   /usr/local/include
+  /opt/local/include/freetype2/
+  /usr/local/include/freetype2/
 )
-
-message("------>" ${FREETYPE_INCLUDE_DIR_ft2build})
 
 FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h
   $ENV{FREETYPE_DIR}/include/freetype2
@@ -59,6 +59,8 @@ FIND_PATH(FREETYPE_INCLUDE_DIR_freetype2 freetype/config/ftheader.h
   /sw/include
   /opt/local/include
   /usr/freeware/include
+  /opt/local/include
+  /usr/local/include
   PATH_SUFFIXES freetype2
 )
 

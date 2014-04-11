@@ -19,7 +19,7 @@ static const struct {
     int          code;
     const char*  message;
 } FT_Errors[] =
-#include <freetype/fterrors.h>
+#include <fterrors.h>
 
 /**
  * Simple exception class to handle freetype errors.

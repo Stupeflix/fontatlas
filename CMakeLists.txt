@@ -17,8 +17,8 @@ file(GLOB_RECURSE HEADERS "src/*.hpp")
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # if(not ${FREETYPE_INCLUDE_DIRS})
-set(FREETYPE_INCLUDE_DIRS /opt/local/include/freetype2/
-                          /usr/local/include/freetype/)
+# set(FREETYPE_INCLUDE_DIRS /opt/local/include/freetype2/
+                          # /usr/local/include/freetype2/)
 # endif()
 
 # Include libs directories.
