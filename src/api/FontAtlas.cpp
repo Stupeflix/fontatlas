@@ -11,10 +11,10 @@ namespace osgStupeflix {
 
 namespace fontAtlas {
 
-void generateFontData(std::string const &path,
+void generateFontData(std::string const &font_path,
                       std::string const &output_dir,
                       DataType dataType,
-                      std::size_t resolution,
+                      std::size_t font_size,
                       std::size_t padding,
                       std::size_t size,
                       bool verbose,
@@ -22,9 +22,9 @@ void generateFontData(std::string const &path,
 
 
   core::MetaData meta_data;
-  std::string out_path = output_dir + "/" + utils::getFileName(path);
+  std::string out_path = output_dir + "/" + utils::getFileName(font_path);
   core::Atlas atlas(size, size);
-  core::Font font(path, resolution);
+  core::Font font(font_path, font_size);
   size_t currentOffset = 0;
   size_t prevOffset = 0;
   size_t i = 1;
@@ -85,15 +85,15 @@ void generateFontData(std::string const &path,
 }
 
 void generateFromChar(wchar_t c,
-                      std::string const &path,
+                      std::string const &font_path,
                       std::string const &meta_dir,
                       std::string const &output_dir,
-                      std::size_t resolution,
+                      std::size_t font_size,
                       std::size_t padding,
                       std::size_t size) {
   core::MetaData meta_data;
-  std::string meta_file = meta_dir + "/" + utils::getFileName(path) + ".meta";
-  std::string out_path = output_dir + "/" + utils::getFileName(path);
+  std::string meta_file = meta_dir + "/" + utils::getFileName(font_path) + ".meta";
+  std::string out_path = output_dir + "/" + utils::getFileName(font_path);
 
   if (!meta_data.load(meta_file))
     throw std::runtime_error("Cannot find meta-data file " + meta_file);
@@ -101,7 +101,7 @@ void generateFromChar(wchar_t c,
   /* Initialize font tools */
 
   core::Atlas atlas(size, size);
-  core::Font font(path, resolution, meta_data.getRowFromChar(c));
+  core::Font font(font_path, font_size, meta_data.getRowFromChar(c));
   size_t currentOffset = 0;
   size_t prevOffset = 0;
   size_t i = 1;
@@ -135,6 +135,14 @@ void generateFromChar(wchar_t c,
 
 }
 
+void getKerning(wchar_t first,
+                wchar_t second,
+                std::string const &font_path,
+                std::size_t font_size) {
+  return ft::Face(font_path, font_size).getKerning(first, second);
 }
 
-}
+
+} // namespace fontAtlas
+
+} // namespace osgStupeflix

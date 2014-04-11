@@ -64,7 +64,7 @@ class Face {
   /**
    * Return the kerning value between the 2 given charcode.
    */
-  math::Vector2i getKerning(wchar_t prev,
+  float getKerning(wchar_t prev,
       wchar_t current,
       unsigned int mode = FT_KERNING_UNFITTED) const;
 

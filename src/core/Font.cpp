@@ -151,11 +151,8 @@ void Font::_computeKerning() {
   for (size_t i = 1; i < _glyphs.size(); ++i) {
     glyph = _glyphs[i];
     for (size_t j = 1; j < _glyphs.size(); ++j) {
-      prev = _glyphs[j];
-      math::Vector2i const &kerning =
-          _face.getKerning(prev->charcode, glyph->charcode);
-      if (kerning.x)
-        glyph->kerning[prev->charcode] = kerning.x / (float)(64.0f * 64.0f);
+      _glyphs[j]->kerning[prev->charcode] =
+        _face.getKerning(prev->charcode, glyph->charcode);
     }
   }
 }

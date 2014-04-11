@@ -84,15 +84,15 @@ ft::Glyph *Face::loadGlyph(wchar_t charcode, int flags) const {
   return glyph;
 }
 
-math::Vector2i Face::getKerning(wchar_t prev,
-                                wchar_t current,
-                                unsigned int mode) const {
+float Face::getKerning(wchar_t prev,
+                       wchar_t current,
+                       unsigned int mode) const {
   math::Vector2i v;
   FT_Vector tmp;
   FT_Get_Kerning(_face, getCharIndex(prev), getCharIndex(current), mode, &tmp);
   v.x = tmp.x;
   v.y = tmp.y;
-  return v;
+  return v.x / float(_hres * _hres);
 }
 
 std::wstring Face::getCharacters() const {

@@ -11,10 +11,10 @@ enum DataType {
 };
 
 // Generate all atlas for one font.
-void generateFontData(std::string const &path,
+void generateFontData(std::string const &font_path,
                       std::string const &output_dir = ".",
                       DataType type = FONT_DATA,
-                      std::size_t resolution = 50,
+                      std::size_t font_size = 50,
                       std::size_t padding = 20,
                       std::size_t size = 1024,
                       bool verbose = false,
@@ -22,12 +22,19 @@ void generateFontData(std::string const &path,
 
 // Generate one atlas from the given char.
 void generateFromChar(wchar_t c,
-                      std::string const &path,
+                      std::string const &font_path,
                       std::string const &meta_dir = ".",
                       std::string const &output_dir = ".",
-                      std::size_t resolution = 50,
+                      std::size_t font_size = 50,
                       std::size_t padding = 20,
                       std::size_t size = 1024);
+
+// Return the kerning value between `first` and `second` char. You must give the
+// `font_path` to the font and the `size` of the characters as well.
+void getKerning(wchar_t first,
+                wchar_t second,
+                std::string const &font_path,
+                std::size_t font_size = 50);
 
 }
 
