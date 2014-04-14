@@ -104,7 +104,6 @@ size_t Font::generate(Atlas &atlas, size_t offset) {
   if (offset > size)
     throw std::out_of_range(
         "charcode offset cannot be higher than cache size.");
-
   _textureWidth = atlas.getWidth();
   _textureHeight = atlas.getHeight();
   for (std::size_t i = offset; i < size; ++i) {
@@ -147,14 +146,10 @@ size_t Font::generate(Atlas &atlas, size_t offset) {
 }
 
 void Font::_computeKerning() {
-  ft::Glyph *glyph, *prev;
-
-  /* Compute kernings. */
   for (size_t i = 1; i < _glyphs.size(); ++i) {
-    glyph = _glyphs[i];
     for (size_t j = 1; j < _glyphs.size(); ++j) {
-      _glyphs[j]->kerning[prev->charcode] =
-        _face.getKerning(prev->charcode, glyph->charcode);
+      _glyphs[j]->kerning[_glyphs[i]->charcode] =
+        _face.getKerning(_glyphs[i]->charcode, _glyphs[j]->charcode);
     }
   }
 }

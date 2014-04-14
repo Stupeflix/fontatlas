@@ -26,9 +26,9 @@ void generateFontData(std::string const &font_path,
   std::string out_path = output_dir + "/" + utils::getFileName(font_path);
   core::Atlas atlas(size, size);
   core::Font font(font_path, font_size);
-  size_t currentOffset = 0;
-  size_t prevOffset = 0;
-  size_t i = 1;
+  std::size_t currentOffset = 0;
+  std::size_t prevOffset = 0;
+  std::size_t i = 1;
 
   font.setPadding(padding);
 
