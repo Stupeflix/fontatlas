@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <stdexcept>
+#include <unistd.h>
 #include "utils/Path.hpp"
 #include "core/Font.hpp"
 #include "core/Distmap.hpp"
@@ -10,9 +11,7 @@
 
 namespace osgStupeflix {
 
-namespace fontAtlas {
-
-void generateFontData(std::string const &font_path,
+void FontAtlas::generateFontData(std::string const &font_path,
                       std::string const &output_dir,
                       DataType dataType,
                       std::size_t font_size,
@@ -85,16 +84,13 @@ void generateFontData(std::string const &font_path,
   }
 }
 
-void generateFromChar(wchar_t c,
-                      std::string const &font_path,
-                      std::string const &meta_dir,
-                      std::string const &output_dir,
-                      std::size_t font_size,
-                      std::size_t padding,
-                      std::size_t size) {
+void FontAtlas::generateFromChar(unsigned short c,
+                                 std::string const &font_path,
+                                 std::size_t font_size,
+                                 std::size_t padding,
+                                 std::size_t size) {
   core::MetaData meta_data;
-  std::string meta_file = meta_dir + "/" + utils::getFileName(font_path) + ".meta";
-  std::string out_path = output_dir + "/" + utils::getFileName(font_path);
+  std::string meta_file = font_path + ".meta";
 
   if (!meta_data.load(meta_file))
     throw std::runtime_error("Cannot find meta-data file " + meta_file);
@@ -102,30 +98,30 @@ void generateFromChar(wchar_t c,
   /* Initialize font tools */
 
   core::Atlas atlas(size, size);
-  core::Font font(font_path, font_size, meta_data.getRowFromChar(c));
+  core::MetaData::Row const &row = meta_data.getRowFromChar(c);
+  std::string out_path = font_path + "." + utils::convert<std::string>(row.index);
+
+  if (access((out_path + ".png").c_str(), F_OK) != -1) {
+    std::cout << "File already exists" << std::endl;
+    return ;
+  }
+
+  core::Font font(font_path, font_size, row.chars);
   size_t currentOffset = 0;
   size_t prevOffset = 0;
   size_t i = 1;
 
   font.setPadding(padding);
 
-  while (currentOffset < font.getSize()) {
+  /* Generate atlas */
 
-    /* Generate atlas */
+  currentOffset = font.generate(atlas, row.from);
 
-    std::string atlasPath = out_path + "." +
-      utils::convert<std::string>(i) + ".png";
-    prevOffset = currentOffset;
-    currentOffset = font.generate(atlas, currentOffset);
-    /* Generate distmap and save it to a file */
+  /* Generate distmap and save it to a file */
 
-    core::Distmap distmap(size, size);
-    distmap.generate(atlas);
-    distmap.saveToPng(atlasPath);
-
-    atlas.clear();
-    ++i;
-  }
+  core::Distmap distmap(size, size);
+  distmap.generate(atlas);
+  distmap.saveToPng(out_path + ".png");
 
   /* Save meta data */
 
@@ -136,14 +132,12 @@ void generateFromChar(wchar_t c,
 
 }
 
-float getKerning(wchar_t first,
+float FontAtlas::getKerning(wchar_t first,
                 wchar_t second,
                 std::string const &font_path,
                 std::size_t font_size) {
   return ft::Face(font_path, font_size).getKerning(first, second);
 }
 
-
-} // namespace fontAtlas
 
 } // namespace osgStupeflix

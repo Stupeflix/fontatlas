@@ -13,12 +13,17 @@ void MetaData::addRow(std::wstring const &row, wchar_t from, wchar_t to) {
     _rows.push_back(row.substr(from, to - from));
 }
 
-std::wstring const &MetaData::getRowFromChar(wchar_t c) const {
-    for (wchar_t i = 0; i < _rows.size(); ++i)
+MetaData::Row MetaData::getRowFromChar(wchar_t c) const {
+    unsigned short from = 0;
+    unsigned short to = 0;
+    for (unsigned short i = 0; i < _rows.size(); ++i) {
+        to += _rows[i].size();
         if (_rows[i].find(c) != std::wstring::npos)
-            return _rows[i];
+            return Row{i, from, to, _rows[i]};
+        from = to;
+    }
     throw std::runtime_error("Char doesnt exists in meta-data.");
-    return _rows[0];
+    return Row{0, 0, 0, L""};
 }
 
 bool MetaData::save(std::string const &path) const {
@@ -52,11 +57,6 @@ bool MetaData::load(std::string const &path) {
         _rows.push_back(std::wstring(reinterpret_cast<wchar_t *>(buffer), nb_chars));
         delete buffer;
     }
-    // file.seekg(0, std::ios::end);
-    // size = _file.tellg();
-    // file.seekg(0, std::ios::beg);
-    // buffer = new char[size];
-    // file.read(buffer, size);
     file.close();
     return true;
 }
