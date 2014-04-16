@@ -11,59 +11,40 @@
 
 namespace osgStupeflix {
 
+const std::size_t FontAtlas::DEFAULT_CHARACTER_RESOLUTION = 50;
+const std::size_t FontAtlas::DEFAULT_PADDING = 20;
+const std::size_t FontAtlas::DEFAULT_IMG_SIZE = 1024;
+
 void FontAtlas::generateFontData(std::string const &font_path,
-                      std::string const &output_dir,
-                      DataType dataType,
-                      std::size_t font_size,
-                      std::size_t padding,
-                      std::size_t size,
-                      bool verbose,
-                      bool generate_distmap) {
+                                 std::size_t character_resolution,
+                                 std::size_t padding,
+                                 std::size_t img_size,
+                                 bool verbose) {
 
-
-  core::MetaData meta_data;
-  std::string out_path = output_dir + "/" + utils::getFileName(font_path);
-  core::Atlas atlas(size, size);
-  core::Font font(font_path, font_size);
+  core::Atlas atlas(img_size, img_size);
+  core::Font font(font_path, character_resolution);
   std::size_t currentOffset = 0;
   std::size_t prevOffset = 0;
   std::size_t i = 1;
 
   font.setPadding(padding);
 
-  if (dataType == META_DATA && verbose) {
-    std::cout << "Compute meta data...";
-    std::cout.flush();
-  }
-
   while (currentOffset < font.getSize()) {
 
     /* Generate atlas */
 
-    std::string atlasPath = out_path + "." +
+    std::string atlasPath = font_path + "." +
       utils::convert<std::string>(i) + ".png";
-    if (verbose && dataType == FONT_DATA)
+    if (verbose)
       std::cout << "Generated " << atlasPath << std::endl;
-    else if (verbose && dataType == META_DATA) {
-      std::cout << ".";
-      std::cout.flush();
-    }
     prevOffset = currentOffset;
     currentOffset = font.generate(atlas, currentOffset);
-    if (dataType == META_DATA)
-      meta_data.addRow(font.getCache(), prevOffset, currentOffset);
 
     /* Generate distmap and save it to a file */
 
-    if (generate_distmap) {
-      core::Distmap distmap(size, size);
-      distmap.generate(atlas);
-      if (dataType == FONT_DATA)
-        distmap.saveToPng(atlasPath);
-    } else {
-      if (dataType == FONT_DATA)
-        atlas.saveToPng(atlasPath);
-    }
+    core::Distmap distmap(img_size, img_size);
+    distmap.generate(atlas);
+    distmap.saveToPng(atlasPath);
 
     atlas.clear();
     ++i;
@@ -71,55 +52,96 @@ void FontAtlas::generateFontData(std::string const &font_path,
 
   /* Save meta data */
 
-  if (dataType == FONT_DATA) {
-    if (verbose)
-      std::cout << "Generated " << out_path << ".json" << std::endl;
-    std::ofstream jsonFile((out_path + ".json").c_str());
-    jsonFile << font.toJson();
-    jsonFile.close();
-  } else if (dataType == META_DATA) {
-    if (verbose)
-      std::cout << std::endl << "Generated " << out_path << ".meta" << std::endl;
-    meta_data.save(out_path + ".meta");
-  }
+  if (verbose)
+    std::cout << "Generated " << font_path << ".json" << std::endl;
+  std::ofstream jsonFile((font_path + ".json").c_str());
+  jsonFile << font.toJson();
+  jsonFile.close();
+
 }
 
-void FontAtlas::generateFromChar(unsigned short c,
-                                 std::string const &font_path,
-                                 std::size_t font_size,
+void FontAtlas::generateMetaData(std::string const &font_path,
+                                 std::size_t character_resolution,
                                  std::size_t padding,
-                                 std::size_t size) {
+                                 std::size_t img_size,
+                                 bool verbose) {
+
+
+  core::MetaData meta_data;
+  core::Atlas atlas(img_size, img_size);
+  core::Font font(font_path, character_resolution);
+
+  font.setPadding(padding);
+
+  if (verbose) {
+    std::cout << "Compute meta data...";
+    std::cout.flush();
+  }
+
+  std::size_t currentOffset = 0;
+  std::size_t prevOffset = 0;
+  std::size_t i = 1;
+
+  while (currentOffset < font.getSize()) {
+
+    if (verbose) {
+      std::cout << ".";
+      std::cout.flush();
+    }
+
+    /* Generate atlas */
+
+    std::string atlasPath = font_path + "." +
+      utils::convert<std::string>(i) + ".png";
+
+    prevOffset = currentOffset;
+    currentOffset = font.generate(atlas, currentOffset);
+    meta_data.addRow(font.getCache(), prevOffset, currentOffset);
+    atlas.clear();
+    ++i;
+  }
+
+  /* Save meta data */
+
+  if (verbose)
+    std::cout << std::endl << "Generated " << font_path << ".meta" << std::endl;
+  meta_data.save(font_path + ".meta");
+
+}
+
+unsigned short FontAtlas::generateFromChar(unsigned short c,
+                                           std::string const &font_path,
+                                           std::size_t character_resolution,
+                                           std::size_t padding,
+                                           std::size_t img_size) {
+
+  /* Load meta-data */
+
   core::MetaData meta_data;
   std::string meta_file = font_path + ".meta";
-
   if (!meta_data.load(meta_file))
     throw std::runtime_error("Cannot find meta-data file " + meta_file);
 
   /* Initialize font tools */
 
-  core::Atlas atlas(size, size);
+  core::Atlas atlas(img_size, img_size);
   core::MetaData::Row const &row = meta_data.getRowFromChar(c);
   std::string out_path = font_path + "." + utils::convert<std::string>(row.index);
 
-  if (access((out_path + ".png").c_str(), F_OK) != -1) {
-    std::cout << "File already exists" << std::endl;
-    return ;
-  }
+  /* Just return the index and do nothing when the atlas has already been generated */
 
-  core::Font font(font_path, font_size, row.chars);
-  size_t currentOffset = 0;
-  size_t prevOffset = 0;
-  size_t i = 1;
+  if (access((out_path + ".png").c_str(), F_OK) != -1)
+    return row.index;
 
+  /* Generate atlas from font */
+
+  core::Font font(font_path, character_resolution, row.chars);
   font.setPadding(padding);
-
-  /* Generate atlas */
-
-  currentOffset = font.generate(atlas, row.from);
+  font.generate(atlas, row.from);
 
   /* Generate distmap and save it to a file */
 
-  core::Distmap distmap(size, size);
+  core::Distmap distmap(img_size, img_size);
   distmap.generate(atlas);
   distmap.saveToPng(out_path + ".png");
 
@@ -129,14 +151,14 @@ void FontAtlas::generateFromChar(unsigned short c,
   jsonFile << font.toJson();
   jsonFile.close();
 
-
+  return row.index;
 }
 
 float FontAtlas::getKerning(wchar_t first,
                 wchar_t second,
                 std::string const &font_path,
-                std::size_t font_size) {
-  return ft::Face(font_path, font_size).getKerning(first, second);
+                std::size_t character_resolution) {
+  return ft::Face(font_path, character_resolution).getKerning(first, second);
 }
 
 

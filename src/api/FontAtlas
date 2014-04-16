@@ -6,36 +6,45 @@ namespace osgStupeflix {
 
 class FontAtlas {
 public:
-    enum DataType {
-        META_DATA,
-        FONT_DATA
-    };
 
-    // Generate all atlas for one font.
+    // Default generation values.
+    static const std::size_t DEFAULT_CHARACTER_RESOLUTION;
+    static const std::size_t DEFAULT_PADDING;
+    static const std::size_t DEFAULT_IMG_SIZE;
+
+    // Generate all atlases and meta-data files for the given font.
     static void generateFontData(std::string const &font_path,
-                                 std::string const &output_dir = ".",
-                                 DataType type = FONT_DATA,
-                                 std::size_t font_size = 50,
-                                 std::size_t padding = 20,
-                                 std::size_t size = 1024,
-                                 bool verbose = false,
-                                 bool generate_distmap = true);
+        std::size_t character_resolution = DEFAULT_CHARACTER_RESOLUTION,
+        std::size_t padding = DEFAULT_PADDING,
+        std::size_t img_size = DEFAULT_IMG_SIZE,
+        bool verbose = false);
+
+    // Generate a meta-data file which will be used by the generateFromChar
+    // function to generate only one atlas and json file for ranges of
+    // characters.
+    static void generateMetaData(std::string const &font_path,
+        std::size_t character_resolution = DEFAULT_CHARACTER_RESOLUTION,
+        std::size_t padding = DEFAULT_PADDING,
+        std::size_t img_size = DEFAULT_IMG_SIZE,
+        bool verbose = false);
 
     // Generate one atlas from the given char.
     // The path of the meta-data to use, the output png and json is the same as
     // the input font.
-    static void generateFromChar(unsigned short c, // same as wchar_t but doesnt work with bindings
-                                 std::string const &font_path,
-                                 std::size_t font_size = 50,
-                                 std::size_t padding = 20,
-                                 std::size_t size = 1024);
+    // Note: unsigned short is used instead of wchar_t because swig doesnt
+    // support the typedef.
+    static unsigned short generateFromChar(unsigned short c,
+        std::string const &font_path,
+        std::size_t character_resolution = DEFAULT_CHARACTER_RESOLUTION,
+        std::size_t padding = DEFAULT_PADDING,
+        std::size_t img_size = DEFAULT_IMG_SIZE);
 
     // Return the kerning value between `first` and `second` char. You must give the
     // `font_path` to the font and the `size` of the characters as well.
     static float getKerning(wchar_t first,
-                            wchar_t second,
-                            std::string const &font_path,
-                            std::size_t font_size = 50);
+        wchar_t second,
+        std::string const &font_path,
+        std::size_t character_resolution = DEFAULT_CHARACTER_RESOLUTION);
 
 };
 
