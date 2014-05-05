@@ -154,8 +154,8 @@ unsigned short FontAtlas::generateFromChar(unsigned short c,
   return row.index;
 }
 
-float FontAtlas::getKerning(wchar_t first,
-                wchar_t second,
+float FontAtlas::getKerning(unsigned short first,
+                unsigned short second,
                 std::string const &font_path,
                 std::size_t character_resolution) {
   return ft::Face(font_path, character_resolution).getKerning(first, second);
