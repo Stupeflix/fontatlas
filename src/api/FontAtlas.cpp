@@ -16,6 +16,7 @@ const std::size_t FontAtlas::DEFAULT_PADDING = 20;
 const std::size_t FontAtlas::DEFAULT_IMG_SIZE = 1024;
 
 void FontAtlas::generateFontData(std::string const &font_path,
+                                 std::string const &data_path,
                                  std::size_t character_resolution,
                                  std::size_t padding,
                                  std::size_t img_size,
@@ -61,6 +62,7 @@ void FontAtlas::generateFontData(std::string const &font_path,
 }
 
 void FontAtlas::generateMetaData(std::string const &font_path,
+                                 std::string const &data_path,
                                  std::size_t character_resolution,
                                  std::size_t padding,
                                  std::size_t img_size,
@@ -91,7 +93,7 @@ void FontAtlas::generateMetaData(std::string const &font_path,
 
     /* Generate atlas */
 
-    std::string atlasPath = font_path + "." +
+    std::string atlasPath = data_path + "." +
       utils::convert<std::string>(i) + ".png";
 
     prevOffset = currentOffset;
@@ -104,13 +106,14 @@ void FontAtlas::generateMetaData(std::string const &font_path,
   /* Save meta data */
 
   if (verbose)
-    std::cout << std::endl << "Generated " << font_path << ".meta" << std::endl;
-  meta_data.save(font_path + ".meta");
+    std::cout << std::endl << "Generated " << data_path << ".meta" << std::endl;
+  meta_data.save(data_path + ".meta");
 
 }
 
 unsigned short FontAtlas::generateFromChar(unsigned short c,
                                            std::string const &font_path,
+                                           std::string const &data_path,
                                            std::size_t character_resolution,
                                            std::size_t padding,
                                            std::size_t img_size) {
@@ -118,7 +121,7 @@ unsigned short FontAtlas::generateFromChar(unsigned short c,
   /* Load meta-data */
 
   core::MetaData meta_data;
-  std::string meta_file = font_path + ".meta";
+  std::string meta_file = data_path + ".meta";
   if (!meta_data.load(meta_file))
     throw std::runtime_error("Cannot find meta-data file " + meta_file);
 
@@ -126,7 +129,7 @@ unsigned short FontAtlas::generateFromChar(unsigned short c,
 
   core::Atlas atlas(img_size, img_size);
   core::MetaData::Row const &row = meta_data.getRowFromChar(c);
-  std::string out_path = font_path + "." + utils::convert<std::string>(row.index);
+  std::string out_path = data_path + "." + utils::convert<std::string>(row.index);
 
   /* Just return the index and do nothing when the atlas has already been generated */
 

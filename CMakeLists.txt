@@ -12,7 +12,7 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules"
 
 find_package(Math REQUIRED)
 find_package(FreeType REQUIRED)
-find_package(PNG REQUIRED) # to keep for desktop
+find_package(PNG REQUIRED)
 
 # Set source files.
 
@@ -26,26 +26,30 @@ include_directories(${FREETYPE_INCLUDE_DIRS}
                     include)
 
 # Create executables and libraries
-add_library(${PROJECT_NAME} STATIC ${SOURCES}) # SHARED for desktop
+if(FABFILE_COMPILATION)
+    add_library(${PROJECT_NAME} STATIC ${SOURCES})
+else(FABFILE_COMPILATION)
+    add_library(${PROJECT_NAME} SHARED ${SOURCES})
+endif(FABFILE_COMPILATION)
+
 target_link_libraries(${PROJECT_NAME} ${FREETYPE_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${MATH_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ${PNG_LIBRARIES})
 
-# To keep for desktop
+if(NOT FABFILE_COMPILATION)
+    add_executable(font_data ${SOURCES} apps/font_data.cpp)
+    target_link_libraries(font_data ${FREETYPE_LIBRARIES})
+    target_link_libraries(font_data ${MATH_LIBRARIES})
+    target_link_libraries(font_data ${PNG_LIBRARIES})
 
-# add_executable(font_data ${SOURCES} apps/font_data.cpp)
-# target_link_libraries(font_data ${FREETYPE_LIBRARIES})
-# target_link_libraries(font_data ${MATH_LIBRARIES})
-# target_link_libraries(font_data ${PNG_LIBRARIES})
+    add_executable(font_meta_data ${SOURCES} apps/font_meta_data.cpp)
+    target_link_libraries(font_meta_data ${FREETYPE_LIBRARIES})
+    target_link_libraries(font_meta_data ${MATH_LIBRARIES})
+    target_link_libraries(font_meta_data ${PNG_LIBRARIES})
 
-# add_executable(font_meta_data ${SOURCES} apps/font_meta_data.cpp)
-# target_link_libraries(font_meta_data ${FREETYPE_LIBRARIES})
-# target_link_libraries(font_meta_data ${MATH_LIBRARIES})
-# target_link_libraries(font_meta_data ${PNG_LIBRARIES})
+    # Generate install rule.
 
-# Generate install rule.
-
-# to keep for desktop
-# install(TARGETS font_data       RUNTIME DESTINATION bin)
-# install(TARGETS font_meta_data  RUNTIME DESTINATION bin)
-# install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
+    install(TARGETS font_data       RUNTIME DESTINATION bin)
+    install(TARGETS font_meta_data  RUNTIME DESTINATION bin)
+    install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
+endif(NOT FABFILE_COMPILATION)

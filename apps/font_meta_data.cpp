@@ -21,6 +21,7 @@ int main(int argc, char **argv) {
 
   osgStupeflix::FontAtlas::generateMetaData(
     cmd.getArg<std::string>(0),
+    cmd.getArg<std::string>(0),
     cmd.getOpt<std::size_t>("character_resolution"),
     cmd.getOpt<std::size_t>("padding"),
     cmd.getOpt<std::size_t>("img_size"),

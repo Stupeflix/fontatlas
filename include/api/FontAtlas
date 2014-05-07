@@ -14,6 +14,7 @@ public:
 
     // Generate all atlases and meta-data files for the given font.
     static void generateFontData(std::string const &font_path,
+        std::string const &data_path,
         std::size_t character_resolution = DEFAULT_CHARACTER_RESOLUTION,
         std::size_t padding = DEFAULT_PADDING,
         std::size_t img_size = DEFAULT_IMG_SIZE,
@@ -23,6 +24,7 @@ public:
     // function to generate only one atlas and json file for ranges of
     // characters.
     static void generateMetaData(std::string const &font_path,
+        std::string const &data_path,
         std::size_t character_resolution = DEFAULT_CHARACTER_RESOLUTION,
         std::size_t padding = DEFAULT_PADDING,
         std::size_t img_size = DEFAULT_IMG_SIZE,
@@ -35,6 +37,7 @@ public:
     // support the typedef.
     static unsigned short generateFromChar(unsigned short c,
         std::string const &font_path,
+        std::string const &data_path,
         std::size_t character_resolution = DEFAULT_CHARACTER_RESOLUTION,
         std::size_t padding = DEFAULT_PADDING,
         std::size_t img_size = DEFAULT_IMG_SIZE);

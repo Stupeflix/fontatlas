@@ -15,19 +15,20 @@ LIBRARIES = ["fontatlas"]
 
 BUILD_SUFFIX="-lagunas"
 
-FREETYPE_FLAGS="""-D FREETYPE_INCLUDE_DIR_freetype2:PATH=%s/freetype2-ios/include/freetype  \
--D FREETYPE_INCLUDE_DIR_ft2build:PATH=%s/freetype2-ios/include  \
--D FREETYPE_LIBRARY:PATH=%s/ios/apps/dependencies/lib/ios/libfreetype.a \
-""" % (DEVEL, DEVEL, DEVEL)
+FREETYPE_FLAGS="""-D FREETYPE_INCLUDE_DIR_freetype2:PATH=%(devel)s/freetype2-ios/include/freetype  \
+-D FREETYPE_INCLUDE_DIR_ft2build:PATH=%(devel)s/freetype2-ios/include  \
+-D FREETYPE_LIBRARY:PATH=%(devel)s/ios/apps/dependencies/lib/ios/libfreetype.a \
+""" % {"devel": DEVEL}
 
-PNG_FLAGS="""-D PNG_PNG_INCLUDE_DIR:PATH=%s/libpng-ios/include/ \
--D PNG_LIBRARIES:PATH=%s/libpng-ios/build/libpng.a \
-""" % (DEVEL, DEVEL)
+PNG_FLAGS="""-D PNG_PNG_INCLUDE_DIR:PATH=%(devel)s/libpng-ios/include/ \
+-D PNG_LIBRARIES:PATH=%(devel)s/libpng-ios/build/libpng.a \
+""" % {"devel": DEVEL}
 
 LIB_FLAGS = PNG_FLAGS + FREETYPE_FLAGS
 
 COMMON_FLAGS="""-D CMAKE_C_COMPILER_FORCED:BOOL=ON \
 -D CMAKE_CXX_COMPILER_FORCED:BOOL=ON \
+-D FABFILE_COMPILATION:BOOL=ON \
 """
 
 CMAKE_CXX_FLAGS=" -stdlib=libstdc++ -std=c++11 -ftree-vectorize -fvisibility-inlines-hidden -pipe -no-cpp-precomp "
