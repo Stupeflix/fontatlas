@@ -16,6 +16,7 @@ find_package(PNG REQUIRED)
 
 # Set source files.
 
+file(GLOB_RECURSE HEADERS "include/*.hpp")
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 # Include libs directories.
@@ -49,6 +50,7 @@ if(NOT FABFILE_COMPILATION)
 
     # Generate install rule.
 
+    install(FILES   ${HEADERS}              DESTINATION include/fontatlas)
     install(TARGETS font_data       RUNTIME DESTINATION bin)
     install(TARGETS font_meta_data  RUNTIME DESTINATION bin)
     install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
