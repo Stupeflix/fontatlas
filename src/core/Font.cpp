@@ -3,6 +3,7 @@
 #include <limits>
 #include <cmath>
 #include <wchar.h>
+#include <iostream>
 #include "ft/Error.hpp"
 #include "ft/Library.hpp"
 #include "core/Font.hpp"
@@ -101,12 +102,9 @@ std::string Font::toJson(bool rd) const {
 
 size_t Font::generate(Atlas &atlas, size_t offset) {
   std::size_t size = _cache.size();
-  if (offset > size)
-    throw std::out_of_range(
-        "charcode offset cannot be higher than cache size.");
   _textureWidth = atlas.getWidth();
   _textureHeight = atlas.getHeight();
-  for (std::size_t i = offset; i < size; ++i) {
+  for (std::size_t i = 0; i < size; ++i) {
 
     /* Load glyphs data from face */
     std::size_t x = 0;
