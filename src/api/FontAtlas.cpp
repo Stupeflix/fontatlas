@@ -79,11 +79,9 @@ void FontAtlas::generateMetaData(std::string const &font_path,
     std::cout << "Compute meta data...";
     std::cout.flush();
   }
-
   std::size_t currentOffset = 0;
   std::size_t prevOffset = 0;
   std::size_t i = 1;
-
   while (currentOffset < font.getSize()) {
 
     if (verbose) {
@@ -97,7 +95,7 @@ void FontAtlas::generateMetaData(std::string const &font_path,
       utils::convert<std::string>(i) + ".png";
 
     prevOffset = currentOffset;
-    currentOffset = font.generate(atlas, currentOffset);
+    currentOffset += font.generate(atlas, currentOffset);
     meta_data.addRow(font.getCache(), prevOffset, currentOffset);
     atlas.clear();
     ++i;
