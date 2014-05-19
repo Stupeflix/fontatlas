@@ -126,7 +126,12 @@ def build(BUILD, release="true", reset="true", target=None):
                 local("%s/ndk-build -j 8 NDK_APPLICATION_MK=Application.mk" % NDK)
                 
 @task
-def create_framework(platform="ios"):
+def create_framework(platform="ios", release = "true"):
+    if release.lower() == "true":
+        CONFIG_TYPE = "Release"
+    else:
+        CONFIG_TYPE= "Debug"
+        
     if not platform == "ios":
        raise Exception("Platform should be ios")
 
@@ -140,7 +145,7 @@ def create_framework(platform="ios"):
     for name in LIBRARIES:
         for target in targets:
             src_name = "lib%s.a" % name
-            command += " " + os.path.join(HERE, "build-ios-%s%s/Release-iphone%s" % (target, BUILD_SUFFIX, "os" if target == "device" else target), src_name)
+            command += " " + os.path.join(HERE, "build-ios-%s%s/%s-iphone%s" % (target, BUILD_SUFFIX, CONFIG_TYPE, "os" if target == "device" else target), src_name)
 
     local(command)
 
@@ -149,8 +154,13 @@ def create_framework(platform="ios"):
     ios.finalize_framework_structure(FRAMEWORK_PATH, FRAMEWORK_NAME)
 
 @task
-def copy_framework(platform="ios", target = "release"):
-    DESTS = ["../iosframeworks/frameworks/%s/" % target]
+def copy_framework(platform="ios", release = "release"):
+    if release.lower() == "true":
+        CONFIG_TYPE = "Release"
+    else:
+        CONFIG_TYPE= "Debug"
+
+    DESTS = ["../iosframeworks/frameworks/%s/" % CONFIG_TYPE]
     for framework in [FRAMEWORK_NAME]:
         frameworkPath = os.path.join(HERE, "frameworks/%s.framework" % framework)
         for d in DESTS:
@@ -158,12 +168,18 @@ def copy_framework(platform="ios", target = "release"):
             local("rsync -av %s %s" % (frameworkPath, d))
 
 @task
-def all():
-    build("device")
-    build("simulator")
-    create_framework()
-    copy_framework()
+def all_(release = "true"):
+    build("device", release)
+    build("simulator", release)
+    create_framework(release = release)
+    copy_framework(release = release)
 
+@task
+def all(release = "true"):
+    all_("true")
+    all_("false")
+
+    
 @task
 def clean():
     build_path = "build-*%s" % (BUILD_SUFFIX,)
