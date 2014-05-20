@@ -17,7 +17,10 @@ set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules"
 # Find required libraries.
 
 find_package(Math REQUIRED)
-find_package(FreeType REQUIRED)
+find_package(PkgConfig REQUIRED)
+if(PKGCONFIG_FOUND)
+    pkg_check_modules(FREETYPE freetype2)
+endif()
 find_package(PNG REQUIRED)
 
 # Set source files.
