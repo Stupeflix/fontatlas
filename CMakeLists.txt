@@ -2,14 +2,11 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)
 
 project(fontatlas)
 
-# Config.
-if (UNIX)
-    #do something
-    set(CMAKE_CXX_FLAGS "-ggdb3 -std=c++11 -Wno-write-strings")
-endif (UNIX)
-if (APPLE)
+if(APPLE)
     set(CMAKE_CXX_FLAGS "-ggdb3 -stdlib=libstdc++ -std=c++11 -Wno-write-strings")
-endif (APPLE)
+else()
+    set(CMAKE_CXX_FLAGS "-ggdb3 -std=c++11 -Wno-write-strings")
+endif()
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake_modules"
                       "${CMAKE_MODULE_PATH}" )
