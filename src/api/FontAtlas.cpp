@@ -11,7 +11,7 @@
 
 namespace osgStupeflix {
 
-const std::size_t FontAtlas::DEFAULT_CHARACTER_RESOLUTION = 50;
+const std::size_t FontAtlas::DEFAULT_CHARACTER_RESOLUTION = 80;
 const std::size_t FontAtlas::DEFAULT_PADDING = 20;
 const std::size_t FontAtlas::DEFAULT_IMG_SIZE = 1024;
 
