@@ -104,7 +104,7 @@ size_t Font::generate(Atlas &atlas, size_t offset) {
   std::size_t size = _cache.size();
   _textureWidth = atlas.getWidth();
   _textureHeight = atlas.getHeight();
-  for (std::size_t i = 0; i < size; ++i) {
+  for (std::size_t i = offset; i < size; ++i) {
 
     /* Load glyphs data from face */
     std::size_t x = 0;
