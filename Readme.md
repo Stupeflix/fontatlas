@@ -4,6 +4,8 @@ FontAtlas
 Install
 -------
 
+You need libfreetype6-dev installed to compile it.
+
 ```sh
 $ mkdir build && cd build && cmake .. && sudo make install
 ```
