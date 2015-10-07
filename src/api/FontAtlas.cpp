@@ -30,16 +30,20 @@ void FontAtlas::generateFontData(std::string const &font_path,
 
   font.setPadding(padding);
 
+    if (verbose)
+      std::cout << "Font size is " << font.getSize() << std::endl;
+
   while (currentOffset < font.getSize()) {
 
     /* Generate atlas */
 
     std::string atlasPath = font_path + "." +
       utils::convert<std::string>(i) + ".png";
-    if (verbose)
-      std::cout << "Generated " << atlasPath << std::endl;
-    prevOffset = currentOffset;
     currentOffset = font.generate(atlas, currentOffset);
+
+    if (verbose)
+      std::cout << "Generated " << atlasPath << " - offset is now " << currentOffset << std::endl;
+    prevOffset = currentOffset;
 
     /* Generate distmap and save it to a file */
 
